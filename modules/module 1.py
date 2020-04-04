@@ -53,7 +53,7 @@ m = load_model("../data/models/third_model.h5")
 for i in range(len(res)):
     res[i] = res[i] / 255
 res = np.array(res)
-res = res.reshape(len(res), 45, 45, 1)
+res = res.reshape((len(res), 45, 45, 1))
 pred = m.predict_classes(res)
 dic = {'0': 0, '1': 1, '2': 2, '3': 3, '4': 4, '5': 5, '6': 6, '7': 7, '8': 8, '9': 9, 'plus': 10, 'minus': 11,
        'X': 12, 'y': 13, 'z': 14, 'comma': 15, 'pareno': 16, 'parenc': 17}

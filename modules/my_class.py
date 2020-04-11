@@ -16,8 +16,6 @@ class Contour(object):
         self.contour = self.get_contours()
 
     def get_contours(self):
-        plt.imshow(self.white)
-        plt.show()
         cnts = cv2.findContours(self.black, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
         cnts = cnts[0] if len(cnts) == 2 else cnts[1]
         posx = []
@@ -82,7 +80,7 @@ class Contour(object):
                               [self.width[i] for i in down] + self.width[last_pos + 1:])
 
 
-class Equation(object):
+class ImageSolver(object):
     dic = {0: '0', 1: '1', 2: '2', 3: '3', 4: '4', 5: '5', 6: '6', 7: '7', 8: '8', 9: '9',
            10: '+', 11: '-', 12: 'x', 13: 'y', 14: 'z', 15: ',', 16: '(', 17: ')'}
 
@@ -95,7 +93,7 @@ class Equation(object):
         self.res = None
         self.numbers = None
         self.predict = None
-        self.final_eq = ""
+        self.f_pred = None
         self.division = []
         self.pot = []
         self.number_pred = None
@@ -122,6 +120,7 @@ class Equation(object):
         res = np.array(res)
         self.res = res.reshape((len(res), 45, 45, 1))
         self.predict = [self.dic[k] for k in self.model.predict_classes(self.res)]
+        self.f_pred = [i for i in self.predict]
         self.number_pred = np.full((len(self.predict)), 2)
         for i in range(len(self.predict)):
             if self.predict[i] == '-':
@@ -185,6 +184,7 @@ class Equation(object):
             self.equation = self.equation.replace(f'{i}x', f'{i}*x')
             self.equation = self.equation.replace(f'{i}y', f'{i}*y')
             self.equation = self.equation.replace(f'{i}z', f'{i}*z')
+        self.equation = self.equation.replace(',', '.')
 
     def minus_verification(self, pos):
         up = []
@@ -217,8 +217,8 @@ class Equation(object):
                 self.division.append([i for i in range(first_pos, last_pos + 1)])
 
     def pot_verification(self, pos):
-        if pos != 0 and self.predict[pos] != "=" and pos != 0 and self.predict[pos - 1] != "=" and self.predict[
-            pos - 1] != '-':
+        if pos != 0 and self.predict[pos] != "=" and pos != 0 and self.predict[pos - 1] != "=" and \
+                self.predict[pos - 1] != '-':
             for j in self.division:
                 if ((pos in j and pos - 1 in j) or
                     (pos in self.pot and pos - 1 in self.pot) or
@@ -660,13 +660,9 @@ class Equation(object):
                             return [self.dic[j], prob[j]]
                         return self.dic[j]
 
+    def __str__(self):
+        return self.equation
 
-import os
-
-l = os.listdir("../data/images")
-print(l)
-d = Equation(f'../data/images/{l[0]}')
-print(d.predict)
-print(d.equation)
-if '=' not in d.equation:
-    print(eval(d.equation))
+    def __repr__(self):
+        return (f'{self.__class__.__name__}('
+           f'{self.f_pred!r}, {self.equation!r})')

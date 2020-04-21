@@ -1,7 +1,9 @@
 import cv2
 import numpy as np
+import tensorflow as tf
 from keras.models import load_model
 from PIL import Image
+from silence_tensorflow import silence_tensorflow
 
 
 class Contour(object):
@@ -84,6 +86,7 @@ class ImageSolver(object):
            10: '+', 11: '-', 12: 'x', 13: 'y', 14: 'z', 15: ',', 16: '(', 17: ')'}
 
     def __init__(self, image, model):
+        silence_tensorflow()
         self.img = Image.open(image)
         self.image = np.array(self.img.convert('L'))
         if self.image.shape[0] > self.image.shape[1]:
@@ -669,7 +672,7 @@ class ImageSolver(object):
 
 if __name__ == "__main__":
     import os
-    l = os.listdir("../data/images")
+    l = os.listdir("../static/images")
     print(l)
-    d = ImageSolver(f'../data/images/{l[1]}', "../data/models/third_model.h5")
+    d = ImageSolver(f'../models/images/{l[1]}', "../models/models/third_model.h5")
     print(d)

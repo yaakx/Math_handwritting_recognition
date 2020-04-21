@@ -1,4 +1,5 @@
 import numpy as np
+import time
 from sympy import Symbol, lambdify, Eq, solveset, S
 from sympy.solvers import solve
 from abc import ABC, abstractmethod
@@ -33,50 +34,55 @@ class Calculator(MathTypes):
         return self.solution
 
     def to_str(self):
-        return f'[{str(self.solution)}]'
+        return f'{str(self.solution)}'
 
 
 class Equation(MathTypes):
     def resolve(self):
         eq = f'{self.equation.split("=")[0]}-({self.equation.split("=")[1]})'
         eq = eq.replace(self.symbol[0], 'x')
-        x = Symbol('x')
+        x = Symbol('x', real=True)
         self.solution = solve(eval(eq), x)
         return self.solution
 
     def to_str(self):
-        s = '['
-        for i in range(len(self.solution)):
-            s += f'{self.symbol[0]}={str(self.solution[i])}'
-            if i != len(self.solution) - 1:
-                s += ","
-        s += ']'
+        s = ''
+        if self.solution:
+            for i in range(len(self.solution)):
+                s += f'{self.symbol[0]}={str(self.solution[i])}'
+                if i != len(self.solution) - 1:
+                    s += "\n"
+        else:
+            s = "No real solutions"
         return s
 
 
 class Function(MathTypes):
     def resolve(self):
+        solution = []
         if len(self.symbol) < 3:
+            t = time.time()
             eq = f'{self.equation.split("=")[0]}-({self.equation.split("=")[1]})'
             if 'x' in self.symbol:
                 eq = eq.replace('z', 'y')
             else:
                 eq.replace('z', 'x')
-            x = Symbol('x')
-            y = Symbol('y')
+                self.symbol = ['z', 'y']
+            x = Symbol('x', real=True)
+            y = Symbol('y', real=True)
             f = eval(eq)
             f_l = lambdify(x, f)
-            self.solution = []
             lin = np.linspace(-20, 20, 50)
-            print(f)
             for i in lin:
                 try:
                     x_sol = solve(f_l(i), y)
+                    if time.time() - t > 10:
+                        return []
                     for j in x_sol:
-                        self.solution.append([i, j])
+                        solution.append([i, j])
                 except:
                     pass
-        return self.solution
+        return solution
 
     def derivative(self, symbol):
         if 'x' in self.symbol:
@@ -116,7 +122,9 @@ class MathSolver(object):
                 if i == 'x' or i == 'y' or i == 'z':
                     symbol.append(i)
             self.type = 'F'
-            return Function(self.equation, list(set(symbol)))
+            b = list(set(symbol))
+            b.sort()
+            return Function(self.equation, b)
 
     def __str__(self):
         return str(self.solution)
@@ -130,9 +138,9 @@ if __name__ == "__main__":
     import os
     from app.modules.my_class import ImageSolver
 
-    l = os.listdir("../data/images")
+    l = os.listdir("../static/images")
     print(l)
-    d = ImageSolver(f'../data/images/{l[-6]}', "../data/models/third_model.h5")
+    d = ImageSolver(f'../models/images/{l[-6]}', "../models/models/third_model.h5")
     m = MathSolver(d.equation)
     print(m.solution)
     """print(repr(d))

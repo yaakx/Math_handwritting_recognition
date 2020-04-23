@@ -5,6 +5,33 @@
     <title>Solution</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript">
+google.charts.load('current', {packages: ['corechart', 'line']});
+google.charts.setOnLoadCallback(drawCurveTypes);
+
+function drawCurveTypes() {
+      var data = new google.visualization.DataTable();
+      data.addColumn('number', '{{symbol0}}');
+      data.addColumn('number', '{{symbol1}}');
+      data.addRows({{array}})
+      var options = {
+        hAxis: {
+          title: '{{symbol0}}'
+        },
+        vAxis: {
+          title: '{{symbol1}}'
+        },
+        series: {
+          1: {curveType: 'function'}
+        }
+      };
+
+      var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+      chart.draw(data, options);
+    }
+    </script>
+</head>
 <body>
 <header>
     <nav class="navbar navbar-expand-lg navbar-info  bg-info">
@@ -28,8 +55,8 @@
 		<div class="col-md-2">
 		</div>
 		<div class="col-md-8">
-            <p>The formula detected by the neural network is:</p>
-<p>{{equation}}</p>
+            <p style="font-size:30px">The formula detected by the neural network is:</p>
+<p style="font-size:30px">{{equation}}</p>
 <div id="chart_div" style="width: 900px; height: 500px"></div>
         </div>
         </div>

@@ -1,7 +1,7 @@
 import argparse
 import os
-from app.modules.my_class import ImageSolver
-from app.modules.resolve import MathSolver
+from app.modules.image_solver import ImageSolver
+from app.modules.math_solver import MathSolver
 
 
 def main():

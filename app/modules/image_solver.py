@@ -668,11 +668,3 @@ class ImageSolver(object):
     def __repr__(self):
         return (f'{self.__class__.__name__}('
            f'{self.f_pred!r}, {self.equation!r})')
-
-
-if __name__ == "__main__":
-    import os
-    l = os.listdir("../static/images")
-    print(l)
-    d = ImageSolver(f'../models/images/{l[1]}', "../models/models/third_model.h5")
-    print(d)

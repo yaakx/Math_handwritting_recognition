@@ -134,17 +134,3 @@ class MathSolver(object):
            f'{self.equation!r}, {self.solution!r})')
 
 
-if __name__ == "__main__":
-    import os
-    from app.modules.my_class import ImageSolver
-
-    l = os.listdir("../static/images")
-    print(l)
-    d = ImageSolver(f'../models/images/{l[-6]}', "../models/models/third_model.h5")
-    m = MathSolver(d.equation)
-    print(m.solution)
-    """print(repr(d))
-    print(d)
-    print(m)
-    print(repr(m))
-    print(m.solution)"""

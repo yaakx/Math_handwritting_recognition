@@ -1,8 +1,8 @@
 import os
 from flask import Flask, render_template, request, redirect, url_for
 from werkzeug.utils import secure_filename
-from modules.my_class import ImageSolver
-from modules.resolve import MathSolver
+from modules.image_solver import ImageSolver
+from modules.math_solver import MathSolver
 
 
 app = Flask(__name__)

@@ -31,6 +31,11 @@ function drawCurveTypes() {
       chart.draw(data, options);
     }
     </script>
+    <style>
+    img.resize {
+  max-width:25%;
+  max-height:25%;
+}</style>
 </head>
 <body>
 <header>
@@ -58,6 +63,7 @@ function drawCurveTypes() {
             <p style="font-size:30px">The formula detected by the neural network is:</p>
 <p style="font-size:30px">{{equation}}</p>
 <div id="chart_div" style="width: 900px; height: 500px"></div>
+            <img class="resize" src={{filename}}>
         </div>
         </div>
 	</div>
